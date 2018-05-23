@@ -1,20 +1,21 @@
-
 /**
  * Module dependencies.
  */
 
+require('dotenv').config();
+
 const express = require('express'),
-      routes = require('./routes'),
+      sql = require('mssql'),
+      db = require('./config/db'),
       user = require('./routes/user'),
       path = require('path'),
       favicon = require('serve-favicon'),
       methodOverride = require('method-override'),
       bodyParser = require('body-parser'),
       pug = require('pug');
-
+//Initialize App
 const app = express();
 const port = process.env.PORT || 3000;
-
 
   app.set('views', __dirname + '/views');
   app.set('view engine', 'pug');
@@ -22,14 +23,22 @@ const port = process.env.PORT || 3000;
 
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(methodOverride('X-HTTP-Method-Override'))
-
-
   app.use(express.static(path.join(__dirname, 'public')));
 
+  sql.connect(db).then(pool => {
+    //Include ROUTER
+    require('./routes')(app, pool, sql);
 
-app.get('/', routes.index);
-app.get('/users', user.list);
+    //Start Server
+    app.listen(3000, () => {
+        console.log('app listening on port => '+ port);
+    });
+  }).catch(err => {
+      console.log(err);
+      //sql.close();
+  });
 
-app.listen(port, function () {
-        console.log('Dev app listening on port '+ port);
-});
+  sql.on('error', err => {
+  // ... error handler
+      console.log(err);
+  });

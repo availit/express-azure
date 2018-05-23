@@ -1,8 +1,12 @@
 
 /*
- * GET home page.
+ * Routes Index
  */
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Express on Azure!' });
-};
+ const apiRoutes = require('./api_routes');
+ const userRoutes = require('./user');
+
+ module.exports = (app, pool, sql) => {
+ 	apiRoutes(app, pool, sql);
+ 	userRoutes(app, pool, sql);
+ };
