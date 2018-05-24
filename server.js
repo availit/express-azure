@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 
-require('dotenv').config();
+//require('dotenv').config();
 
 const express = require('express'),
       sql = require('mssql'),
