@@ -1,8 +1,9 @@
+
 /**
  * Module dependencies.
  */
 
-//require('dotenv').config();
+ const dotenv = require('dotenv').config()
 
 const express = require('express'),
       sql = require('mssql'),
@@ -15,7 +16,7 @@ const express = require('express'),
       pug = require('pug');
 //Initialize App
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 1234;
 
   app.set('views', __dirname + '/views');
   app.set('view engine', 'pug');
@@ -30,7 +31,7 @@ const port = process.env.PORT || 3000;
     require('./routes')(app, pool, sql);
 
     //Start Server
-    app.listen(3000, () => {
+    app.listen(port, () => {
         console.log('app listening on port => '+ port);
     });
   }).catch(err => {
